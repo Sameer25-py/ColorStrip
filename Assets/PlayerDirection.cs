@@ -5,9 +5,10 @@ namespace DefaultNamespace
 {
     public class PlayerDirection : MonoBehaviour
     {
-        [SerializeField] private float speed = 100f;
+        [SerializeField] private float          speed = 100f;
+        private                  SpriteRenderer _renderer;
 
-        private SpriteRenderer _renderer;
+        public bool IsGameStarted = false;
 
         private void OnEnable()
         {
@@ -21,6 +22,7 @@ namespace DefaultNamespace
 
         private void FixedUpdate()
         {
+            if (!IsGameStarted) return;
             transform.RotateAround(transform.parent.position, Vector3.forward, (Time.deltaTime * speed));
         }
     }
