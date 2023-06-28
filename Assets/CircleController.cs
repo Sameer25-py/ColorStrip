@@ -21,7 +21,7 @@ namespace DefaultNamespace
 
             Circle  randomCircle = circles[Random.Range(0, circles.Count)];
             Vector3 randomPos    = Random.insideUnitCircle * 2f;
-            if (Vector3.Distance(randomPos, player.position) < 0.5f)
+            if (Vector3.Distance(randomPos, player.position) < 1f)
             {
                 SpawnCircle();
             }

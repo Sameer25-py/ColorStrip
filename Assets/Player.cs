@@ -3,6 +3,7 @@ using System.Timers;
 using DefaultNamespace;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Timeline;
 
 public class Player : MonoBehaviour
@@ -18,6 +19,8 @@ public class Player : MonoBehaviour
     private bool    _startCountingTime = false;
     private Vector3 _direction;
 
+    private bool _enableTimeCountAfterPause = false;
+
     private SpriteRenderer _renderer;
 
     private void OnEnable()
@@ -28,14 +31,14 @@ public class Player : MonoBehaviour
     private void Update()
     {
         if (!IsGameStarted) return;
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject(0))
         {
             _startCountingTime = true;
             _direction         = (direction.transform.position - transform.position).normalized;
             direction.gameObject.SetActive(false);
         }
 
-        if (_startCountingTime)
+        if (_startCountingTime && IsGameStarted)
         {
             _elapsedTime += Time.deltaTime;
             if (_elapsedTime > maxTravelTime)
@@ -89,7 +92,16 @@ public class Player : MonoBehaviour
     {
         direction.IsGameStarted = false;
         trail.DisableTrail();
-        IsGameStarted      = false;
+        IsGameStarted = false;
+        if (_startCountingTime)
+        {
+            _enableTimeCountAfterPause = true;
+        }
+        else
+        {
+            _enableTimeCountAfterPause = false;
+        }
+
         _startCountingTime = false;
     }
 
@@ -98,6 +110,6 @@ public class Player : MonoBehaviour
         direction.IsGameStarted = true;
         trail.EnableTrail();
         IsGameStarted      = true;
-        _startCountingTime = true;
+        _startCountingTime = _enableTimeCountAfterPause;
     }
 }

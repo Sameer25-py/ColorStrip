@@ -10,7 +10,7 @@ namespace DefaultNamespace
         public static Action GamePause;
 
 
-        public GameObject Gameplay, InGameUI;
+        public GameObject Gameplay, InGameUI, PauseUI, SettingsUI, MainMenuUI;
         public TMP_Text   Score;
 
         public Player           player;
@@ -28,7 +28,6 @@ namespace DefaultNamespace
         {
             Gameplay.SetActive(false);
             InGameUI.SetActive(false);
-            
         }
 
         public void StartGame()
@@ -62,6 +61,27 @@ namespace DefaultNamespace
         private void Start()
         {
             Preview();
+        }
+
+        public void PauseGame()
+        {
+            PauseUI.SetActive(true);
+            player.PauseGame();
+        }
+
+        public void ResumeGame()
+        {
+            PauseUI.SetActive(false);
+            player.ResumeGame();
+        }
+
+        public void MainMenu()
+        {
+            Gameplay.SetActive(false);
+            InGameUI.SetActive(false);
+            PauseUI.SetActive(false);
+            SettingsUI.SetActive(false);
+            MainMenuUI.SetActive(true);
         }
     }
 }
