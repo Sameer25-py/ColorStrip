@@ -1,6 +1,7 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace DefaultNamespace
 {
@@ -10,7 +11,7 @@ namespace DefaultNamespace
         public static Action GamePause;
 
 
-        public GameObject Gameplay, InGameUI, PauseUI, SettingsUI, MainMenuUI;
+        public GameObject Gameplay, InGameUI, PauseUI, SettingsUI, MainMenuUI, EndGameUI, FirstTouchUI;
         public TMP_Text   Score;
 
         public Player           player;
@@ -28,10 +29,12 @@ namespace DefaultNamespace
         {
             Gameplay.SetActive(false);
             InGameUI.SetActive(false);
+            EndGameUI.SetActive(true);
         }
 
         public void StartGame()
-        {
+        {   
+            FirstTouchUI.SetActive(false);
             player.StartGame();
             circleController.SpawnCircle();
         }
@@ -40,15 +43,18 @@ namespace DefaultNamespace
         {
             _score     = 0;
             Score.text = _score.ToString();
+            MainMenuUI.SetActive(false);
             Gameplay.SetActive(true);
             InGameUI.SetActive(true);
             player.Preview();
             circleController.SpawnCircle();
+            _firstTouch = false;
+            FirstTouchUI.SetActive(true);
         }
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject(0))
             {
                 if (!_firstTouch)
                 {
@@ -57,12 +63,6 @@ namespace DefaultNamespace
                 }
             }
         }
-
-        private void Start()
-        {
-            Preview();
-        }
-
         public void PauseGame()
         {
             PauseUI.SetActive(true);
@@ -81,6 +81,7 @@ namespace DefaultNamespace
             InGameUI.SetActive(false);
             PauseUI.SetActive(false);
             SettingsUI.SetActive(false);
+            EndGameUI.SetActive(false);
             MainMenuUI.SetActive(true);
         }
     }

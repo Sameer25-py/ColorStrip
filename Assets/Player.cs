@@ -75,7 +75,8 @@ public class Player : MonoBehaviour
     }
 
     public void Preview()
-    {
+    {   
+        direction.gameObject.SetActive(true);
         direction.IsGameStarted = true;
     }
 
