@@ -12,7 +12,7 @@ namespace DefaultNamespace
 
 
         public GameObject Gameplay, InGameUI, PauseUI, SettingsUI, MainMenuUI, EndGameUI, FirstTouchUI;
-        public TMP_Text   Score;
+        public TMP_Text   Score,HighScore;
 
         public Player           player;
         public CircleController circleController;
@@ -22,7 +22,15 @@ namespace DefaultNamespace
 
         private void OnEnable()
         {
-            GameEnd += OnGameEndCalled;
+            GameEnd                   += OnGameEndCalled;
+            CircleController.Collided += OnCircleCollided;
+        }
+
+        private void OnCircleCollided()
+        {
+            _score         += 1;
+            Score.text     =  _score.ToString();
+            HighScore.text =  _score.ToString();
         }
 
         private void OnGameEndCalled()
@@ -33,16 +41,20 @@ namespace DefaultNamespace
         }
 
         public void StartGame()
-        {   
+        {
             FirstTouchUI.SetActive(false);
             player.StartGame();
             circleController.SpawnCircle();
+            _score         = 0;
+            Score.text     = _score.ToString();
+            HighScore.text = _score.ToString();
         }
 
         public void Preview()
         {
-            _score     = 0;
-            Score.text = _score.ToString();
+            _score         = 0;
+            Score.text     = _score.ToString();
+            HighScore.text = _score.ToString();
             MainMenuUI.SetActive(false);
             Gameplay.SetActive(true);
             InGameUI.SetActive(true);
@@ -63,6 +75,7 @@ namespace DefaultNamespace
                 }
             }
         }
+
         public void PauseGame()
         {
             PauseUI.SetActive(true);
